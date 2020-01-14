@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {User} from './user.model';
 
 @model()
 export class Allocation extends Entity {
@@ -28,6 +29,8 @@ export class Allocation extends Entity {
   })
   updated_at: string;
 
+  @hasMany(() => User, {keyTo: 'userId'})
+  users: User[];
 
   constructor(data?: Partial<Allocation>) {
     super(data);
