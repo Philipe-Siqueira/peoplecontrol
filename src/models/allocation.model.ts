@@ -1,7 +1,25 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
-import {User} from './user.model';
+import { Entity, model, property, belongsTo } from '@loopback/repository';
+import { User, UserWithRelations } from './user.model';
+import { Project, ProjectWithRelations } from './project.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      projectId: {
+        name: 'projectId',
+        entity: 'Project',
+        entityKey: 'id',
+        foreignKey: 'projectId',
+      },
+      userId: {
+        name: 'userId',
+        entity: 'User',
+        entityKey: 'id',
+        foreignKey: 'userId',
+      },
+    },
+  },
+})
 export class Allocation extends Entity {
   @property({
     type: 'number',
@@ -29,8 +47,11 @@ export class Allocation extends Entity {
   })
   updated_at: string;
 
-  @hasMany(() => User, {keyTo: 'userId'})
-  users: User[];
+  @belongsTo(() => User, { keyFrom: 'userId' }, { name: 'userId' })
+  userId: number;
+
+  @belongsTo(() => Project, { keyFrom: 'projectId' }, { name: 'projectId' })
+  projectId: number;
 
   constructor(data?: Partial<Allocation>) {
     super(data);
@@ -39,6 +60,8 @@ export class Allocation extends Entity {
 
 export interface AllocationRelations {
   // describe navigational properties here
+  user?: UserWithRelations;
+  project?: ProjectWithRelations;
 }
 
 export type AllocationWithRelations = Allocation & AllocationRelations;

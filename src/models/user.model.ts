@@ -1,13 +1,13 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 
 @model()
 export class User extends Entity {
   @property({
-    type: 'string',
+    type: 'number',
     id: true,
     generated: true,
   })
-  id?: string;
+  id?: number;
 
   @property({
     type: 'string',
@@ -45,14 +45,12 @@ export class User extends Entity {
 
   @property({
     type: 'date',
-    required: true,
     default: '$now',
   })
   created_at: string;
 
   @property({
     type: 'date',
-    required: true,
     default: '$now',
   })
   updated_at: string;
@@ -61,11 +59,6 @@ export class User extends Entity {
     type: 'date',
   })
   deleted_at?: string;
-
-  @property({
-    type: 'number',
-  })
-  userId?: number;
 
   constructor(data?: Partial<User>) {
     super(data);
